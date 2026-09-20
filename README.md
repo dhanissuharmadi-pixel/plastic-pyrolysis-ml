@@ -34,6 +34,11 @@ Rows are individual experiments compiled by hand from published studies. See
 The notebook loads `dataset_template.csv` if it has real rows, otherwise falls
 back to the synthetic set (and warns).
 
+`data/reference/` holds real public datasets pulled as reference (CC BY 4.0),
+with sources and licenses in [`data/reference/REFERENCES.md`](data/reference/REFERENCES.md).
+These are source material for building the real dataset, not yet in the project
+schema.
+
 ## Method
 
 - Three separate regressors, one per fraction (liquid / gas / solid).
