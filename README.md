@@ -49,6 +49,21 @@ schema.
 - SHAP for interpretability: which conditions push each fraction up or down.
 - Predictions from the three models are normalized to sum to 100 %.
 
+## What makes this different
+
+Most yield-prediction projects stop at "conditions -> yield". This one adds two
+things on top:
+
+- **Condition recommender (inverse optimization).** Ask it the reverse question:
+  `recommend_conditions("PP", "max_liquid")` searches the condition space and
+  returns the best temperature / catalyst / residence time for a target product,
+  restricted to conditions the model has actually seen.
+- **Trust-aware predictions.** Every prediction carries a conformal `±` band
+  (validated to ~90 % coverage) and an in-domain / extrapolating flag, so the
+  model tells you when it is guessing instead of pretending it always knows.
+
+One line: a recommender that knows when it is guessing.
+
 ## Run
 
 ```bash
@@ -58,15 +73,16 @@ pip install -r requirements.txt
 jupyter notebook notebooks/pyrolysis_yield.ipynb
 ```
 
-Run the notebook top to bottom. It will generate the synthetic data (if needed),
-train and compare models, show SHAP plots, and save the best models to
-`models/`.
+Run the notebook top to bottom. It generates the synthetic data (if needed),
+compares models, shows SHAP, builds the conformal + in-domain trust layer, runs
+the condition recommender, and saves everything to `models/`.
 
 ## Status
 
-Early. Running on synthetic demo data. Next step is collecting real rows from
-the literature into `dataset_template.csv`; the notebook reruns unchanged on real
-data once you do.
+Early but complete end to end on synthetic demo data: model comparison, SHAP,
+trust layer (conformal ~90 % coverage + in-domain flag), and the recommender all
+run. Next step is collecting real rows from the literature into
+`dataset_template.csv`; the notebook reruns unchanged on real data once you do.
 
 ## Roadmap ideas (later)
 
