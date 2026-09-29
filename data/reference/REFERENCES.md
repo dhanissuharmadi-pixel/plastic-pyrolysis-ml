@@ -47,19 +47,23 @@ Downloaded 2026-09-20.
 
 ---
 
-## 4. Belden et al. 2023 - 325-point plastic pyrolysis dataset (MANUAL download)
+## 4. Belden et al. 2023 - 325-point plastic pyrolysis dataset  ⭐ EXTRACTED
 
-- The canonical open compiled dataset for this exact task: 325 data points from
-  39 papers, XGBoost the best model (MAE 9.1 %). Features: plastic mass
-  fractions, temperature, heating rate, particle size, feed amount, catalyst,
-  reactor type.
+- File: `belden2023_oilyield.csv` (extracted from Table SI.1 of the SI PDF).
+- The canonical open compiled dataset for this task: **325 rows from 39 papers**,
+  XGBoost the best model in the paper (MAE 9.1 %). Verified row count matches.
 - Source: Belden, E. R. et al. (2023). *Machine Learning Predictions of Oil
   Yields Obtained by Plastic Pyrolysis.* ACS Engineering Au 3(2), 91-101.
-  DOI: 10.1021/acsengineeringau.2c00038 (open access)
-- The data is **Table SI.1 inside the Supporting Information PDF**, and the ACS
-  site is behind a Cloudflare wall that blocks scripted download. Grab it by hand:
-  open the article, click "Supporting Information", download
-  `eg2c00038_si_001.pdf`, and copy Table SI.1 out. Free full text (no paywall)
-  is also mirrored at PMC: https://pmc.ncbi.nlm.nih.gov/articles/PMC10119934/
-- Worth doing - this is the closest match to our schema and the best-known
-  benchmark in the field.
+  DOI: 10.1021/acsengineeringau.2c00038 (open access). Data is Table SI.1 in
+  `eg2c00038_si_001.pdf`. PMC mirror: https://pmc.ncbi.nlm.nih.gov/articles/PMC10119934/
+- Schema (note: differs from our synthetic schema):
+  - Feedstock as **mass-fraction columns** `HDPE_wt, LDPE_wt, PP_wt, PS_wt,
+    PVC_wt, PET_wt` (mixture-friendly; `plastic_sum_wt` is added for transparency
+    and is NOT always 100 - some rows are mixed waste with non-plastic content).
+  - `temperature_C`, `heating_rate_C_min`, `particle_size_mm`, `feed_mass_g`
+    (last three have missing values, left blank as in the paper).
+  - `catalyst` is binary Yes/No (no ratio). `reactor_type` in {Batch, Fixed Bed,
+    Fluidized Bed, Horizontal Tube, Semi Batch}.
+  - **Target is `oil_yield_wpct` only** - no gas/solid split in this dataset.
+  - `source_ref` = paper number 1-39 (reference list is on pp. 24-29 of the SI).
+- Ranges: temperature 250-850 C, oil yield 2-99 wt%.
