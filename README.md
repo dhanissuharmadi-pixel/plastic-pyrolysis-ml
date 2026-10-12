@@ -64,25 +64,35 @@ things on top:
 
 One line: a recommender that knows when it is guessing.
 
+## Notebooks
+
+- `notebooks/pyrolysis_oil_real.ipynb` - **the real result.** Oil-yield
+  prediction on the 325-row Belden 2023 dataset (`data/reference/belden2023_oilyield.csv`),
+  fraction-based feedstock. XGBoost reaches **MAE 8.96 %**, reproducing the
+  paper's 9.1 % benchmark, then adds SHAP, conformal intervals, the in-domain
+  flag, and the condition recommender on top.
+- `notebooks/pyrolysis_yield.ipynb` - the 3-fraction (liquid/gas/solid) concept,
+  on synthetic data. Kept because no single public dataset has the gas/solid
+  split; it is the proof of concept for when that data gets compiled by hand.
+
 ## Run
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-jupyter notebook notebooks/pyrolysis_yield.ipynb
+jupyter notebook notebooks/pyrolysis_oil_real.ipynb
 ```
 
-Run the notebook top to bottom. It generates the synthetic data (if needed),
-compares models, shows SHAP, builds the conformal + in-domain trust layer, runs
-the condition recommender, and saves everything to `models/`.
+Run a notebook top to bottom: it compares models, shows SHAP, builds the
+conformal + in-domain trust layer, runs the recommender, and saves to `models/`.
+(macOS: `brew install libomp` is needed for xgboost/lightgbm.)
 
 ## Status
 
-Early but complete end to end on synthetic demo data: model comparison, SHAP,
-trust layer (conformal ~90 % coverage + in-domain flag), and the recommender all
-run. Next step is collecting real rows from the literature into
-`dataset_template.csv`; the notebook reruns unchanged on real data once you do.
+Real-data oil-yield model done and reproducing the published benchmark
+(MAE ~9 %), with the recommender + trust layer on top. The 3-fraction track stays
+on synthetic data until gas/solid yields are compiled from the literature.
 
 ## Roadmap ideas (later)
 
