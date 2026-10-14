@@ -66,11 +66,14 @@ One line: a recommender that knows when it is guessing.
 
 ## Notebooks
 
-- `notebooks/pyrolysis_oil_real.ipynb` - **the real result.** Oil-yield
+- `notebooks/pyrolysis_oil_real.ipynb` - **the real, audited result.** Oil-yield
   prediction on the 325-row Belden 2023 dataset (`data/reference/belden2023_oilyield.csv`),
-  fraction-based feedstock. XGBoost reaches **MAE 8.96 %**, reproducing the
-  paper's 9.1 % benchmark, then adds SHAP, conformal intervals, the in-domain
-  flag, and the condition recommender on top.
+  fraction-based feedstock. It audits the data, then evaluates honestly: random
+  CV gives ~9 % MAE (matching the paper) but **grouping by source paper roughly
+  doubles the error** (R² 0.71 -> 0.21), because rows from one paper leak across
+  folds. Keeps missing values as missing (MNAR) with `*_missing` flags instead of
+  imputing, and the recommender returns several candidates with uncertainty.
+  Plus SHAP, conformal intervals (grouped), and the in-domain flag.
 - `notebooks/pyrolysis_yield.ipynb` - the 3-fraction (liquid/gas/solid) concept,
   on synthetic data. Kept because no single public dataset has the gas/solid
   split; it is the proof of concept for when that data gets compiled by hand.
@@ -90,9 +93,11 @@ conformal + in-domain trust layer, runs the recommender, and saves to `models/`.
 
 ## Status
 
-Real-data oil-yield model done and reproducing the published benchmark
-(MAE ~9 %), with the recommender + trust layer on top. The 3-fraction track stays
-on synthetic data until gas/solid yields are compiled from the literature.
+Real-data oil-yield model done and **audited**: the honest (paper-grouped) MAE is
+~17 %, not the ~9 % random-CV number, and the notebook says so. Missing-value
+handling and a multi-candidate recommender with uncertainty are in. The main lever
+from here is more, more diverse papers. The 3-fraction track stays on synthetic
+data until gas/solid yields are compiled from the literature.
 
 ## Roadmap ideas (later)
 
